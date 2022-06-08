@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLineProject", "CommandLineProject\CommandLineProject.csproj", "{D06996DA-E6DF-402C-BE1A-D7DB26F33FB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLineParseExample", "CommandLineProject\CommandLineParseExample.csproj", "{D06996DA-E6DF-402C-BE1A-D7DB26F33FB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineVerbs", "CommandLineVerbs\CommandLineVerbs.csproj", "{A83CD40B-5A9D-4DD4-A35D-4BB90DE769D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLineParseWithVerbsExample", "CommandLineVerbs\CommandLineParseWithVerbsExample.csproj", "{A83CD40B-5A9D-4DD4-A35D-4BB90DE769D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineInterfaceWrapExample", "CommandLineInterfaceWrapExample\CommandLineInterfaceWrapExample.csproj", "{05AF2AE9-FE45-409B-A9FA-7356C842B3C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A83CD40B-5A9D-4DD4-A35D-4BB90DE769D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A83CD40B-5A9D-4DD4-A35D-4BB90DE769D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A83CD40B-5A9D-4DD4-A35D-4BB90DE769D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05AF2AE9-FE45-409B-A9FA-7356C842B3C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05AF2AE9-FE45-409B-A9FA-7356C842B3C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05AF2AE9-FE45-409B-A9FA-7356C842B3C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05AF2AE9-FE45-409B-A9FA-7356C842B3C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
