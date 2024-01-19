@@ -12,92 +12,16 @@ using System.Text;
 //9 (cancellation tokens)
 //11 (Process multiple command -> move results from one to one and finally to program). Very important.
 
-#region Basics
-
-//1. Basic execution
-await Cli
-    //command that will be executed
-    .Wrap("docker")
-    //arguments in form of a string that will be placed after the "docker" stirng
-    .WithArguments("run --detach -e POSTGRES_PASSWORD=password postgres")
-    //async execution without the all output (like all information lines)
-    .ExecuteAsync();
-//Show contents of command result
-//Show how to get process ID
-
-//2. Buffered execution
-var result = await Cli.Wrap("docker")
-    .WithArguments("run --detach -e POSTGRES_PASSWORD=password postgres")
-    //now the results from the operation are stored in "result" variable
-    .ExecuteBufferedAsync();
-//Show contents of buffered command result
-
-//3. Execution that fails
-await Cli.Wrap("docker")
-    //Intentionally write the wrong image name "postresss"
-    .WithArguments("run --detach -e POSTGRES_PASSWORD=password postgresss")
-    .ExecuteAsync();
-//Show how ExecuteBufferedAsync() affects the error message
-
-#endregion Basics
-
-#region 4. Passing arguments in different ways
-
-//a) String interpolation
-var password = "hello world";
-var result2 = await Cli.Wrap("docker")
-    //BAD APPOROACH!! DO NOT use the string interpolation here!!
-    .WithArguments($"run --detach -e POSTGRES_PASSWORD={password} postgres")
-    .ExecuteBufferedAsync();
-//Show that the password is not escaped and the arguments end up malformed
-//Instead of password, it can be anything, e.g. file path
-
-//Solution to this problem:
-//b) use array
-var result3 = await Cli.Wrap("docker")
-    //Pass arguments as a array
-    .WithArguments(new[]
-    {
-        "run",
-        "--detach",
-        "-e", $"POSTGRES_PASSWORD={password}",
-        "postgres"
-    })
-    .ExecuteBufferedAsync();
-//Show that arguments are escaped correctly
-//Nevertheless, this is not the best approach.
-
-//Best way, using ArgumentBuilder:
-//c) ArgumentBuilder
-var result4 = await Cli.Wrap("docker")
-    .WithArguments(args => args
-        .Add("run")
-        .Add("--detach")
-        .Add("-e").Add($"POSTGRES_PASSWORD={password}")
-        .Add("postgres")
-    )
-    .ExecuteBufferedAsync();
-//Show usage with IFormattable
-
-#endregion 4. Passing arguments in different ways
-
-#region 5. Custom arguments builder extensions
-
 var network = "mynet";
-
 var result5 = await Cli.Wrap("docker")
     .WithArguments(args => args
         .Add("run")
         .Add("--detach")
         .Add("-e").Add("POSTGRES_PASSWORD=hello world")
-        //We use the extension method in "ExtensionMethods" folder, to add --network only when network is not null
         .AddOption("--network", network)
         .Add("postgres")
     )
     .ExecuteBufferedAsync();
-//Show how changing network to empty string does not pass the option
-
-#endregion 5. Custom arguments builder extensions
 
 #region 6. Event stream execution models
 
@@ -200,52 +124,24 @@ var result6 = await Cli.Wrap("docker")
     .WithStandardErrorPipe(PipeTarget.ToDelegate(Console.WriteLine))
     .ExecuteBufferedAsync();
 
-Console.WriteLine(result.StandardOutput);
+Console.WriteLine(result6.StandardOutput);
 
 //Explain that ListenAsync() and ObserveAsync() are using a similar setup under the hood
 //Show that this supports async delegates too (Func<string, Task>)
-
-await Cli.Wrap("docker")
-    .WithArguments(args => args
-        .Add("run")
-        .Add("--detach")
-        .Add("-e").Add("POSTGRES_PASSWORD=hello world")
-        .Add("postgres")
-    )
-    .WithStandardOutputPipe(PipeTarget.ToFile("stdout.txt"))
-    .WithStandardErrorPipe(PipeTarget.ToFile("stderr.txt"))
-    .ExecuteAsync();
-
-#endregion 7. Output and error piping
-
-#region 8. Output and error piping with OVERRIDDEN OPERATOR '|' (Interesting)
-
-//The operator '|' is the operator that gives us the pipeline order
-
-var cmd2 = Cli.Wrap("docker")
-    .WithArguments(args => args
-        .Add("run")
-        .Add("-e").Add("POSTGRES_PASSWORD=hello world")
-        .Add("postgres"))
-    | (Console.WriteLine, Console.Error.WriteLine); //here the tuple is used:
-//the first Console.WriteLine is for output and the second for the Error
-//If there is one (not a tuple) the output is processed
-
-await cmd2.ExecuteAsync();
-
-#endregion 8. Output and error piping with OVERRIDDEN OPERATOR '|' (Interesting)
-
-#region 9. Cancellation tokens
-
-//Explain how CliWrap kills the process on cancellation
 
 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(6));
 
 try
 {
-    await Cli.Wrap("ping")
-        .WithArguments("-t google.com")
-        .WithStandardOutputPipe(PipeTarget.ToDelegate(Console.WriteLine))
+    await Cli.Wrap("docker")
+        .WithArguments(args => args
+            .Add("run")
+            .Add("--detach")
+            .Add("-e").Add("POSTGRES_PASSWORD=hello world")
+            .Add("postgres")
+        )
+        .WithStandardOutputPipe(PipeTarget.ToFile("stdout.txt"))
+        .WithStandardErrorPipe(PipeTarget.ToFile("stderr.txt"))
         .ExecuteAsync(cts.Token);
 }
 catch (OperationCanceledException)
@@ -253,7 +149,7 @@ catch (OperationCanceledException)
     Console.WriteLine("Cancelled!");
 }
 
-#endregion 9. Cancellation tokens
+#endregion 7. Output and error piping
 
 #region 10. Input piping
 
