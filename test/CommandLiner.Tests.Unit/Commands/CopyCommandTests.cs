@@ -1,6 +1,6 @@
 namespace CommandLiner.Application.Tests.Unit.Commands;
 
-public class CopyCommand
+public sealed class CopyCommandTests
 {
     [Fact]
     public void Test1()

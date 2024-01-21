@@ -25,6 +25,13 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CommandLiner.Application\CommandLiner.Application.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CommandLiner.Infrastructure\CommandLiner.Infrastructure.csproj" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<Using Include="Xunit" />
 		<Using Include="FluentAssertions" />
