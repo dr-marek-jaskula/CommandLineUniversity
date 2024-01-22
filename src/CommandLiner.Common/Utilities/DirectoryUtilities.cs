@@ -4,7 +4,7 @@ public static class DirectoryUtilities
 {
     public static DirectoryInfo CreateDirectoryInTemp()
     {
-        var directoryPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        var directoryPath = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(Path.GetRandomFileName()));
         return Directory.CreateDirectory(directoryPath);
     }
 
