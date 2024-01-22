@@ -11,16 +11,16 @@ public sealed class CopyCommand(ILogger<CopyCommand> logger)
     [Command("copy", Description = "Use to copy files from source directory to destination directory")]
     public void Handle
     (
-        [Option('s', Description = "source path, relative to current folder.")]
+        [Option("source", shortNames: ['s'] ,Description = "source path, relative to current folder.")]
         string source,
-        [Option('d', Description = "destination path, relative to current folder.")]
+        [Option("destination", shortNames: ['d'], Description = "destination path, relative to current folder.")]
         string destination,
-        [Option('f', Description = "Files to copy. Can be provided with extension or without.")]
-        string fileNames,
-        [Option('p', Description = "Search pattern. Use to search only files with certain extension. For example '*.json'.")]
-        string searchPattern = "*",
-        [Option('o', Description = "If true, than all subdirectories will be searched. Otherwise, only top directory will be searched.")]
-        bool searchSubdirectories = true
+        [Option("fileNames", shortNames: ['f'], Description = "Files to copy. Can be provided with extension or without.")]
+        string[] fileNames,
+        [Option("searchSubdirectories", shortNames: ['t'], Description = "If true, than all subdirectories will be searched. Otherwise, only top directory will be searched.")]
+        bool TopDirectoryOnly,
+        [Option("searchPattern", shortNames: ['p'], Description = "Search pattern. Use to search only files with certain extension. For example '*.json'.")]
+        string searchPattern = "*"
     )
     {
         var sourceDirectory = new DirectoryInfo(source);
@@ -33,7 +33,7 @@ public sealed class CopyCommand(ILogger<CopyCommand> logger)
         {
             destinationDirectory.Create();
 
-            var searchOptions = searchSubdirectories
+            var searchOptions = TopDirectoryOnly
                 ? SearchOption.AllDirectories
                 : SearchOption.TopDirectoryOnly;
 
@@ -44,7 +44,7 @@ public sealed class CopyCommand(ILogger<CopyCommand> logger)
 
             if (filesToCopy.Length is 0)
             {
-                _logger.LogWarning("Files not found");
+                _logger.LogWarning("Files not found.");
                 return;
             }
 
