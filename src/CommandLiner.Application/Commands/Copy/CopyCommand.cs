@@ -11,7 +11,7 @@ public sealed class CopyCommand(ILogger<CopyCommand> logger)
     [Command("copy", Description = "Use to copy files from source directory to destination directory")]
     public void Handle
     (
-        [Option("source", shortNames: ['s'] ,Description = "source path, relative to current folder.")]
+        [Option("source", shortNames: ['s'], Description = "source path, relative to current folder.")]
         string source,
         [Option("destination", shortNames: ['d'], Description = "destination path, relative to current folder.")]
         string destination,
@@ -34,12 +34,13 @@ public sealed class CopyCommand(ILogger<CopyCommand> logger)
             destinationDirectory.Create();
 
             var searchOptions = TopDirectoryOnly
-                ? SearchOption.AllDirectories
-                : SearchOption.TopDirectoryOnly;
+                ? SearchOption.TopDirectoryOnly
+                : SearchOption.AllDirectories;
 
             var filesToCopy = sourceDirectory
                 .GetFiles(searchPattern, searchOptions)
-                .Where(file => fileNames.Contains(Path.GetFileNameWithoutExtension(file.Name)) || fileNames.Contains(Path.GetFileName(file.Name)))
+                .Where(file => fileNames.Contains(Path.GetFileNameWithoutExtension(file.Name)) 
+                            || fileNames.Contains(Path.GetFileName(file.Name)))
                 .ToArray();
 
             if (filesToCopy.Length is 0)

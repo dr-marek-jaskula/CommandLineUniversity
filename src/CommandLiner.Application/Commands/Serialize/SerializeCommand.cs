@@ -76,6 +76,7 @@ public sealed class SerializeCommand(ILogger<SerializeCommand> logger)
         }
     }
 
+    [Ignore]
     private static string ValidateFileName(string fileName, string sourceTypeWithDotAsString)
     {
         var indexOfExtension = fileName.IndexOf(sourceTypeWithDotAsString);
@@ -88,6 +89,7 @@ public sealed class SerializeCommand(ILogger<SerializeCommand> logger)
         return fileName;
     }
 
+    [Ignore]
     [SerializationStrategy(FileType.Yaml, FileType.Json)]
     private static string FromYamlToJson(FileInfo fileToSerialize)
     {
@@ -95,6 +97,7 @@ public sealed class SerializeCommand(ILogger<SerializeCommand> logger)
         return JsonConvert.SerializeObject(deserializedFileContent);
     }
 
+    [Ignore]
     [SerializationStrategy(FileType.Json, FileType.Yaml)]
     private static string FromJsonToYaml(FileInfo fileToSerialize)
     {
